@@ -17,22 +17,25 @@ import { AnalyticsModule } from './modules/analytics/analytics.module';
     SequelizeModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => {
-        console.log('DATABASE_URL =', config.get('DATABASE_URL'));
+      useFactory: (config: ConfigService) => ({
+        dialect: 'postgres',
 
-        return {
-          dialect: 'postgres',
-          url: config.get<string>('DATABASE_URL'),
-          autoLoadModels: true,
-          synchronize: true,
-          dialectOptions: {
-            ssl: {
-              require: true,
-              rejectUnauthorized: false,
-            },
+        // ✅ Use DATABASE_URL only
+        url: config.get<string>('DATABASE_URL'),
+
+        autoLoadModels: true,
+        synchronize: true,
+
+        // ✅ THIS IS THE FIX
+        dialectOptions: {
+          ssl: {
+            require: true,
+            rejectUnauthorized: false,
           },
-        };
-      },
+        },
+
+        logging: false,
+      }),
     }),
 
     BusinessModule,
