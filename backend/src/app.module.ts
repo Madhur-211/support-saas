@@ -19,14 +19,18 @@ import { AnalyticsModule } from './modules/analytics/analytics.module';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         dialect: 'postgres',
-        host: config.get('DB_HOST'),
-        port: Number(config.get('DB_PORT')),
-        username: config.get('DB_USER'),
-        password: config.get('DB_PASSWORD'),
-        database: config.get('DB_NAME'),
+        url: config.get<string>('DATABASE_URL'),
+
         autoLoadModels: true,
-        synchronize: true, // dev only
+        synchronize: true,
         logging: false,
+
+        dialectOptions: {
+          ssl: {
+            require: true,
+            rejectUnauthorized: false,
+          },
+        },
       }),
     }),
 
