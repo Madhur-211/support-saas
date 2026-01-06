@@ -20,13 +20,12 @@ import { AnalyticsModule } from './modules/analytics/analytics.module';
       useFactory: (config: ConfigService) => ({
         dialect: 'postgres',
 
-        // ✅ Use DATABASE_URL only
-        url: config.get<string>('DATABASE_URL'),
+        // ✅ THIS IS THE CRITICAL FIX
+        uri: config.get<string>('DATABASE_URL'),
 
         autoLoadModels: true,
-        synchronize: true,
+        synchronize: true, // dev only
 
-        // ✅ THIS IS THE FIX
         dialectOptions: {
           ssl: {
             require: true,
