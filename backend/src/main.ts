@@ -17,11 +17,14 @@ async function bootstrap() {
 
   // 🌐 CORS (safe for local + production)
   app.enableCors({
-    origin:
-      process.env.NODE_ENV === 'production'
-        ? process.env.FRONTEND_URL
-        : ['http://localhost:3001'],
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'https://support-saas-two.vercel.app', // ✅ Vercel frontend
+    ],
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
   // 🪵 Structured HTTP logging
